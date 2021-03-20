@@ -1,7 +1,4 @@
-from flask import Flask
-
-app = Flask(__name__)
-application = app
+from testimonials import app
 
 
 @app.route('/')
