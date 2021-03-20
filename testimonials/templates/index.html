@@ -11,6 +11,7 @@
     {% for testimonial in testimonials %}
         <p>{{testimonial.message}}</p>
         <p>- {{testimonial.name}}</p>
+        <a href=/{{testimonial.id}}><button>View details</button></a>
     {% endfor %}
     </body>
 </html>
