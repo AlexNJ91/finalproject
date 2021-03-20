@@ -20,12 +20,12 @@ testimonials = [
 ]
 
 
-@app.route('/testimonials')
+@app.route('/')
 def index():
     return render_template('index.html', testimonials=testimonials)
 
 
-@app.route('/testimonials/<id>')
+@app.route('/<id>')
 def show_testimonial(id):
     for testimonial in testimonials:
         if testimonial.get('id') == int(id):
