@@ -5,6 +5,6 @@
     {% for testimonial in testimonials %}
         <p>{{testimonial.message}}</p>
         <p>- {{testimonial.name}}</p>
-        <a href="{{url_for('show_testimonial', id=testimonial.id)}}"><button class="btn btn-primary" type="submit">View details</button></a>
+        <a href="{{url_for('show_testimonial', id=testimonial.id)}}"><button type="submit">View details</button></a>
     {% endfor %}
 {% endblock %}
