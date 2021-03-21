@@ -1,17 +1,10 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-    <head>
-        <meta charset="utf-8">
-        <title>Welcome to my website</title>
-    </head>
-    <body>
-    <h1>Testimonials</h1>
+{% extends "layout.html" %}
+{% block content %}
     <p>Here are some great things people have said:</p>
 
     {% for testimonial in testimonials %}
         <p>{{testimonial.message}}</p>
         <p>- {{testimonial.name}}</p>
-        <a href=/{{testimonial.id}}><button>View details</button></a>
+        <a href="{{url_for('show_testimonial', id=testimonial.id)}}"><button class="btn btn-primary" type="submit">View details</button></a>
     {% endfor %}
-    </body>
-</html>
+{% endblock %}

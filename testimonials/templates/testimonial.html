@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-    <head>
-        <meta charset="utf-8">
-        <title>{{testimonial.name}}'s testimonial</title>
-    </head>
-    <body>
-        <h1>Testimonial</h1>
+{% extends "layout.html" %}
+{% block content %}
         <p>This is what {{testimonial.name}} has to say:</p>
         <p>{{testimonial.message}}</p>
         <a href='/'><button>View All</button></a>
-    </body>
-</html>
+{% endblock %}
