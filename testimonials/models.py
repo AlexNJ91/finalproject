@@ -1,6 +1,7 @@
 from testimonials import db
 from dataclasses import dataclass
 
+
 @dataclass
 class Testimonial(db.Model):
     id: int
