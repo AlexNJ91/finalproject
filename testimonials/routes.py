@@ -1,23 +1,12 @@
-from testimonials import app
-from flask import render_template, abort
+from testimonials import app, db
+from flask import render_template, abort, jsonify
+from testimonials.models import Testimonial
 
-testimonials = [
-    {
-        'id': 10,
-        'name': 'Connor',
-        'message': 'Your course helped me land a job'
-    },
-    {
-        'id': 35,
-        'name': 'Sarah',
-        'message': 'Great!'
-    },
-    {
-        'id': 43,
-        'name': 'John',
-        'message': 'Loved it!'
-    }
-]
+
+@app.route('/api/testimonials')
+def get_testimonials():
+    testimonials = Testimonial.query.all()
+    return jsonify({'testimonials': testimonials})
 
 
 @app.errorhandler(404)
