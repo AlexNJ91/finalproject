@@ -15,6 +15,4 @@ db = SQLAlchemy(app)
 from testimonials.models import Testimonial
 db.create_all()
 
-# testimonials
-# c4krp79wNaBBa6RbYF0d
 import testimonials.routes
