@@ -3,6 +3,20 @@ from flask import render_template, abort, jsonify
 from testimonials.models import Testimonial
 
 
+testimonials = [
+    {
+        'id': 10,
+        'name': 'Connor',
+        'message': 'Your course helped me get a job'
+    },
+    {
+        'id': 35,
+        'name': 'Sarah',
+        'message': 'Great!'
+    }
+    ]
+
+
 @app.route('/api/testimonials')
 def get_testimonials():
     testimonials = Testimonial.query.all()
