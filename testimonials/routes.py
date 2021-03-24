@@ -1,16 +1,25 @@
+from testimonials import app, db
 from testimonials import app, db, bcrypt, jwt
-from flask import render_template, abort, jsonify, request, make_response
+from flask import render_template, abort, jsonify, request
+from testimonials.models import Testimonial
 from testimonials.models import Testimonial, User
 from flask_jwt_extended import jwt_required, create_access_token
-import datetime
 
 
-@app.route('/')
-def index():
-    return render_template('index0.html')
+@app.route('/api/create_user', methods=['POST'])
+def create_user():
+    data = request.get_json()
+    username = data.get('username')
+    password = bcrypt.generate_password_hash(data.get('password')).decode('utf-8')
+
+    user = User(username=username, password=password)
+    db.session.add(user)
+    db.session.commit()
+
+    return jsonify(user.id)
 
 
-@app.route('/login')
+@app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
     username = data.get('username')
@@ -29,34 +38,61 @@ def login():
         return {'error': 'username or password incorrect'}, 400
 
 
-@app.route('/api/create_user', methods=['POST'])
-def create_user():
+@app.route('/api/testimonials')
+def get_testimonials():
+    testimonials = Testimonial.query.all()
+    return jsonify({'testimonials': testimonials})
+
+
+@app.route('/api/testimonials/<id>')
+def get_testimonial(id):
+    testimonial = Testimonial.query.get(id)
+    if testimonial:
+        return jsonify(testimonial)
+    return{}
+
+
+@app.route('/api/testimonials', methods=['POST'])
+def add_testimonial():
     data = request.get_json()
-    username = data.get('username')
-    password = bcrypt.generate_password_hash(data.get('password')).decode('utf-8')
-
-    user = User(username=username, password=password)
-    db.session.add(user)
+    testimonial = Testimonial(name=data.get('name'), testimonial=data.get('testimonial'))
+    db.session.add(testimonial)
     db.session.commit()
+    return jsonify(testimonial.id)
 
-    return jsonify(user.id)
+
+@app.route('/api/testimonials/<id>', methods=['PUT', 'POST'])
+def update_testimonial(id):
+    testimonial = Testimonial.query.get(id)
+    if not testimonial:
+        return {'error': 'not found'}, 400
+    data = request.get_json()
+    testimonial.name = data.get('name')
+    testimonial.testimonial = data.get('testimonial')
+    db.session.commit()
+    return jsonify(testimonial)
+
+
+@app.route('/api/testimonials/<id>', methods=['DELETE'])
+def delete_testimonial(id):
+    testimonial = Testimonial.query.get(id)
+    if not testimonial:
+        return {'error': 'not found'}, 400
+    db.session.delete(testimonial)
+    db.session.commit()
+    return {}
 
 
 testimonials = [
     {
         'id': 10,
-        'name': 'Conor',
-        'message': 'Alex has been great to work with. He was a pleasure to train in business development and an asset to the company'
+        'name': 'Connor',
+        'message': 'Alex has been a pleasure to work with and train in business development. I only needed to show him a process once and he would not ask again. A very attentive and enjoyable member of the team.'
     },
     {
         'id': 35,
         'name': 'Sarah',
-        'message': 'Alex was a great ambassador to the company and the ideas he brought to the table really drove us forward'
-    },
-    {
-        'id': 35,
-        'name': 'Joanne',
-        'message': 'We will be sad to see Alex leave. He has been a key member of our team and we wish him all the best'
+        'message': 'Alex has been an asset to Dillon Bass and helped the marketing department in achieving their aims each year.'
     }
     ]
 
@@ -64,6 +100,27 @@ testimonials = [
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html', title="404 NOT FOUND"), 404
+
+
+@app.route('/')
+def index():
+    return render_template('index0.html')
+
+
+@app.route('/resume')
+def resume():
+    return render_template('resume.html')
+
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+
+@app.route('/interests')
+def interests():
+    return render_template('interests.html')
+
 
 
 @app.route('/testimonials')
