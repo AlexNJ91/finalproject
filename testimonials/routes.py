@@ -16,7 +16,7 @@ def create_user():
     db.session.add(user)
     db.session.commit()
 
-    return jsonify(user.id)
+    return jsonify("New user created", user.id)
 
 
 @app.route('/api/login', methods=['POST'])
@@ -36,7 +36,7 @@ def login():
 
     else:
         return {'error': 'username or password incorrect'}, 400
-
+        return render_template('login.html')
 
 @app.route('/api/testimonials')
 def get_testimonials():
@@ -73,7 +73,7 @@ def update_testimonial(id):
     return jsonify(testimonial)
 
 
-@app.route('/api/testimonials/<id>', methods=['DELETE'])
+@app.route('/api/delete/<id>', methods=['DELETE'])
 def delete_testimonial(id):
     testimonial = Testimonial.query.get(id)
     if not testimonial:
